@@ -1,0 +1,32 @@
+{
+  "claim_id": "CLM-1001",
+  "line_of_business": "auto",
+  "reported_at": "2026-10-14T09:12:00-05:00",
+  "date_of_loss": "2026-10-13",
+  "policy": {
+    "policy_number": "PFA-448210",
+    "effective_date": "2023-03-01",
+    "coverage_changes_last_90_days": []
+  },
+  "policyholder": {
+    "name": "Dana Whitfield",
+    "ssn": "000-48-1123",
+    "drivers_license": "D000-4410-2287",
+    "phone": "555-0142"
+  },
+  "vehicle": {
+    "year": 2021,
+    "make": "Honda",
+    "model": "CR-V",
+    "drivable": true
+  },
+  "description": "Stopped at a red light on Elm St when a pickup truck hit me from behind. Rear bumper is crushed and the trunk will not close. The other driver admitted fault and we exchanged insurance info. Police report filed. No injuries.",
+  "police_report_number": "DPD-2026-118873",
+  "injuries_reported": false,
+  "other_party": {
+    "insurer": "Lonestar Mutual",
+    "admitted_fault": true
+  },
+  "prior_claims_last_3_years": 0,
+  "photos_attached": 4
+}

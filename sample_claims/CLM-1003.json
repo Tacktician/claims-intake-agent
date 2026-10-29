@@ -1,0 +1,33 @@
+{
+  "claim_id": "CLM-1003",
+  "line_of_business": "auto",
+  "reported_at": "2026-10-16T23:05:00-05:00",
+  "date_of_loss": "2026-10-16",
+  "policy": {
+    "policy_number": "PFA-771904",
+    "effective_date": "2026-09-28",
+    "coverage_changes_last_90_days": [
+      {
+        "date": "2026-10-09",
+        "change": "Added comprehensive and collision; raised rental reimbursement to maximum"
+      }
+    ]
+  },
+  "policyholder": {
+    "name": "Riley Castellano",
+    "ssn": "000-23-8841",
+    "drivers_license": "D000-5576-0193",
+    "phone": "555-0177"
+  },
+  "vehicle": {
+    "year": 2024,
+    "make": "BMW",
+    "model": "X5",
+    "drivable": false
+  },
+  "description": "My car was stolen from a parking garage downtown sometime in the evening. I found it later that night burned out in an empty lot. Both keys are with me. I have not filed a police report yet.",
+  "police_report_number": null,
+  "injuries_reported": false,
+  "prior_claims_last_3_years": 3,
+  "photos_attached": 0
+}

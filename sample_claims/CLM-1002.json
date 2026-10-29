@@ -1,0 +1,26 @@
+{
+  "claim_id": "CLM-1002",
+  "line_of_business": "home",
+  "reported_at": "2026-10-15T07:40:00-05:00",
+  "date_of_loss": "2026-10-14",
+  "policy": {
+    "policy_number": "PFH-902117",
+    "effective_date": "2019-06-15",
+    "coverage_changes_last_90_days": []
+  },
+  "policyholder": {
+    "name": "Marcus Oyelaran",
+    "ssn": "000-71-5590",
+    "drivers_license": "D000-1983-6620",
+    "phone": "555-0198"
+  },
+  "property": {
+    "type": "single-family home",
+    "year_built": 1998
+  },
+  "description": "A supply line under the upstairs bathroom sink burst overnight. Water came through the kitchen ceiling and part of the drywall collapsed. Hardwood floors in the kitchen and hallway are warped. We shut off the main valve and called a plumber. The house is livable but the kitchen is unusable.",
+  "injuries_reported": false,
+  "mitigation_taken": "Main water valve shut off; plumber repaired the line on 2026-10-14.",
+  "prior_claims_last_3_years": 0,
+  "photos_attached": 7
+}
