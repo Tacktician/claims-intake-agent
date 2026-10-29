@@ -23,14 +23,14 @@ client = anthropic.Anthropic(
 
 # After
 client = anthropic.Anthropic(
-    base_url=f"{os.environ['FABRIC_GATEWAY_URL']}/anthropic",
+    base_url=os.environ["FABRIC_GATEWAY_URL"],  # includes the /anthropic route
     api_key="not-used",  # Fabric injects the real Anthropic key upstream
-    default_headers={"X-Gateway-Key": os.environ["FABRIC_GATEWAY_KEY"]},
+    default_headers={"fg-api-key": os.environ["FABRIC_GATEWAY_KEY"]},
 )
 ```
 
-1. **Base URL:** your gateway URL plus the `/anthropic` route prefix. The SDK appends `/v1/messages` itself.
-2. **Credential:** the gateway key, sent in the `X-Gateway-Key` header. The SDK still requires an `api_key` value, so it gets a placeholder.
+1. **Base URL:** your full gateway URL, including the `/anthropic` route prefix (no trailing slash). The SDK appends `/v1/messages` itself.
+2. **Credential:** the gateway key, sent in the `fg-api-key` header. The SDK still requires an `api_key` value, so it gets a placeholder.
 
 ## Requirements
 
@@ -60,7 +60,7 @@ Make the two-line change in `claims_intake_agent.py` (or run the solution file),
 
 ```bash
 unset ANTHROPIC_API_KEY
-export FABRIC_GATEWAY_URL="https://<gateway-subdomain>.fabricgateway.ai"
+export FABRIC_GATEWAY_URL="https://<gateway-subdomain>.dp.fabricgateway.ai/anthropic"
 export FABRIC_GATEWAY_KEY="<gateway-key>"
 python solution/claims_intake_agent.py --all
 ```

@@ -67,9 +67,9 @@ class ClaimTriage(BaseModel):
 # --- Anthropic client ---------------------------------------------------------
 # Lesson 8 changes this block so the agent calls Fabric instead of Anthropic.
 client = anthropic.Anthropic(
-    base_url=f"{os.environ['FABRIC_GATEWAY_URL']}/anthropic",
+    base_url=os.environ["FABRIC_GATEWAY_URL"],  # includes the /anthropic route
     api_key="not-used",  # Fabric injects the real Anthropic key upstream
-    default_headers={"X-Gateway-Key": os.environ["FABRIC_GATEWAY_KEY"]},
+    default_headers={"fg-api-key": os.environ["FABRIC_GATEWAY_KEY"]},
 )
 # ------------------------------------------------------------------------------
 
