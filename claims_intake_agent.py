@@ -4,10 +4,10 @@ Triages a first notice of loss (FNOL) for an auto or homeowners claim: it reads 
 claim file, asks Claude for a structured triage, and prints the result for the
 adjuster who picks the claim up.
 
-This is the "before" version used in Introduction to Fabric, Lesson 8. It calls
-Anthropic directly with a provider key read from ANTHROPIC_API_KEY. The lesson
-changes the client block below so the agent calls Fabric instead. The finished
-version is in solution/claims_intake_agent.py.
+This is the "before" version shared by Introduction to Fabric (Lesson 8) and
+Introduction to Passport (Lesson 3). It calls Anthropic directly with a provider
+key read from ANTHROPIC_API_KEY. Each lesson changes the client block below. The
+finished versions are in solutions/fabric/ and solutions/passport/.
 
 Usage:
     python claims_intake_agent.py sample_claims/CLM-1001.json
@@ -65,15 +65,9 @@ class ClaimTriage(BaseModel):
 
 
 # --- Anthropic client ---------------------------------------------------------
-# Lesson 8 changes this block so the agent calls Fabric instead of Anthropic.
-# client = anthropic.Anthropic(
-#     api_key=os.environ["ANTHROPIC_API_KEY"],
-# )
-
+# The course lessons change this block so the key no longer lives here.
 client = anthropic.Anthropic(
-    base_url=f"{os.environ['FABRIC_GATEWAY_URL']}",
-    api_key="not-used",  # Fabric injects the real Anthropic key upstream
-    default_headers={"fg-api-key": os.environ["FABRIC_GATEWAY_KEY"]},
+    api_key=os.environ["ANTHROPIC_API_KEY"],
 )
 # ------------------------------------------------------------------------------
 

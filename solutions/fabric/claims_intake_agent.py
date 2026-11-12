@@ -10,8 +10,8 @@ Fabric gateway instead of Anthropic: the base URL points at the gateway's
 real Anthropic key and injects it upstream, so this file never sees it.
 
 Usage:
-    python solution/claims_intake_agent.py sample_claims/CLM-1001.json
-    python solution/claims_intake_agent.py --all
+    python solutions/fabric/claims_intake_agent.py sample_claims/CLM-1001.json
+    python solutions/fabric/claims_intake_agent.py --all
 """
 
 import argparse
@@ -25,7 +25,7 @@ import anthropic
 from pydantic import BaseModel, Field
 
 MODEL = "claude-sonnet-5-5"
-SAMPLE_DIR = Path(__file__).resolve().parent.parent / "sample_claims"
+SAMPLE_DIR = Path(__file__).resolve().parent.parent.parent / "sample_claims"
 
 SYSTEM_PROMPT = """You are the Claims Intake Agent for PostFinancial Solutions, a property and \
 casualty insurer that writes auto and homeowners policies.

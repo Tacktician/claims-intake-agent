@@ -2,18 +2,19 @@
 
 A small Python agent that triages first notice of loss (FNOL) claims for PostFinancial Solutions, the fictional auto and homeowners insurer in the Postman Academy **Fabric** learning path. It reads a claim file, asks Claude for a structured triage (loss category, severity, SIU referral, missing information, next step), and prints the result for the adjuster.
 
-It is the hands-on asset for **Introduction to Fabric, Lesson 8: Connect a Client**. The agent starts out calling Anthropic directly with a provider key in its config, which is exactly what Jordan's audit team flagged. In the lesson you change two things so it calls Fabric instead.
+It is the hands-on asset for two courses: **Introduction to Fabric, Lesson 8: Connect a Client** and **Introduction to Passport, Lesson 3: Follow One Request with the Claims Agent**. The agent starts out calling Anthropic directly with a provider key, which is exactly what each course's scenario flags. Each course changes the client block so the key leaves the agent.
 
 ## What's here
 
 | Path | What it is |
 | --- | --- |
-| `claims_intake_agent.py` | The **before** version. Calls Anthropic directly using `ANTHROPIC_API_KEY`. |
-| `solution/claims_intake_agent.py` | The **after** version. Calls Fabric using `FABRIC_GATEWAY_URL` and `FABRIC_GATEWAY_KEY`. |
+| `claims_intake_agent.py` | The **before** version, shared by both courses. Calls Anthropic directly using `ANTHROPIC_API_KEY`. |
+| `solutions/fabric/claims_intake_agent.py` | The Fabric **after** version. Calls Fabric using `FABRIC_GATEWAY_URL` and `FABRIC_GATEWAY_KEY`. |
+| `solutions/passport/claims_intake_agent.py` | The Passport **after** version. Sends a `{{vault:ANTHROPIC_API_KEY}}` reference and relies on the Passport Proxy to add the key. |
 | `sample_claims/` | Three synthetic claims: a rear-end collision, a burst supply line, and a theft with fraud indicators. |
 | `.env.example` | The environment variables each version reads. |
 
-The two files are identical except for the client block (and their doc comments):
+The three files are identical except for the client block (and their doc comments):
 
 ```python
 # Before
@@ -21,22 +22,29 @@ client = anthropic.Anthropic(
     api_key=os.environ["ANTHROPIC_API_KEY"],
 )
 
-# After
+# After: Fabric
 client = anthropic.Anthropic(
     base_url=os.environ["FABRIC_GATEWAY_URL"],  # includes the /anthropic route
     api_key="not-used",  # Fabric injects the real Anthropic key upstream
     default_headers={"fg-api-key": os.environ["FABRIC_GATEWAY_KEY"]},
 )
+
+# After: Passport
+client = anthropic.Anthropic(
+    api_key="{{vault:ANTHROPIC_API_KEY}}",  # a reference; the proxy adds the real key
+)
 ```
 
-1. **Base URL:** your full gateway URL, including the `/anthropic` route prefix (no trailing slash). The SDK appends `/v1/messages` itself.
-2. **Credential:** the gateway key, sent in the `fg-api-key` header. The SDK still requires an `api_key` value, so it gets a placeholder.
+**Fabric:** the base URL is your full gateway URL, including the `/anthropic` route prefix (no trailing slash). The SDK appends `/v1/messages` itself. The credential is the gateway key, sent in the `fg-api-key` header, and the SDK gets a placeholder `api_key`.
+
+**Passport:** the agent still calls Anthropic. The change is that `api_key` is a secret reference, not a key. The call has to travel through a Passport connection (`passport setup`, or `passport lens run`) so the proxy can swap the reference for the real key.
 
 ## Requirements
 
 - Python 3.10 or later (the `anthropic` 1.x SDK requires it)
 - An Anthropic API key, for the before version
-- A Fabric tenant with an `anthropic` connection, route, and gateway key, for the after version (Introduction to Fabric, Lessons 4 to 6)
+- **Fabric after version:** a Fabric tenant with an `anthropic` connection, route, and gateway key (Introduction to Fabric, Lessons 4 to 6)
+- **Passport after version:** the Passport CLI connected to a proxy, with your Anthropic key stored in the proxy's secret store and the Anthropic API registered as a resource. For evaluation, the Passport plugin's `setup passport` skill runs a Local Docker proxy (needs Docker, `openssl`, `curl`, `jq`, and Node.js).
 
 ## Setup
 
@@ -56,16 +64,27 @@ python claims_intake_agent.py --all
 
 ## Point it at Fabric
 
-Make the two-line change in `claims_intake_agent.py` (or run the solution file), then remove the provider key from your shell so it can't be used by accident:
+Run the Fabric solution, then remove the provider key from your shell so it can't be used by accident:
 
 ```bash
 unset ANTHROPIC_API_KEY
 export FABRIC_GATEWAY_URL="https://<gateway-subdomain>.dp.fabricgateway.ai/anthropic"
 export FABRIC_GATEWAY_KEY="<gateway-key>"
-python solution/claims_intake_agent.py --all
+python solutions/fabric/claims_intake_agent.py --all
 ```
 
 The output is the same. The difference is where the call went: open **Observability → Traces** in the Fabric console, filter **Protocol = LLM** and **Route = anthropic**, and each triage shows up as its own trace. Each run also prints the request ID and token counts, which helps you match a run to its trace.
+
+## Point it at Passport
+
+With your machine connected to a Passport Proxy, remove the provider key and run the Passport solution:
+
+```bash
+unset ANTHROPIC_API_KEY
+python solutions/passport/claims_intake_agent.py --all
+```
+
+To see the reference being swapped without a team proxy, wrap the run in the Passport inspector: `passport lens run python solutions/passport/claims_intake_agent.py sample_claims/CLM-1001.json`.
 
 ## Notes for course authors
 
